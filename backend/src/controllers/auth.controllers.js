@@ -1,10 +1,12 @@
 import { database } from "../db/database.js";
 import generarJwt from "../helpers/generar-jwt.js";
 
+//Iniciar sesión
 export const signInCtrl = async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    //Lógica de negocio de la base de datos
     const user = database.user.find(
       (user) => user.username === username && user.password === password
     );
@@ -26,14 +28,13 @@ export const signInCtrl = async (req, res) => {
       secure: false, // Cambiar a true en producción con HTTPS
       maxAge: 3600000, // Expiración en milisegundos (1 hora)
     });
-
     return res.json({ message: "Inicio de sesión exitoso" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Error Inesperado" });
   }
 };
-
+//Controlador del Cierre de sesión
 export const signOutCtrl = (req, res) => {
   try {
     req.session.destroy((err) => {
@@ -49,7 +50,7 @@ export const signOutCtrl = (req, res) => {
     return res.status(500).json({ message: "Error Inesperado" });
   }
 };
-
+//Validar si el usuario puede acceder al área
 export const validateSessionCtrl = (req, res) => {
   console.log(req.user);
   return res.json({
