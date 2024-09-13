@@ -22,3 +22,20 @@ export async function createTodo(title, completed) {
     console.error(`Error al crear la tarea: ${error}`);
   }
 }
+export async function deleteTodo(id) {
+  try {
+    const response = await fetch(`http://localhost:4000/todos/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("Tarea eliminada:", data);
+  } catch (error) {
+    console.error("Error al eliminar la tarea:", error);
+  }
+}

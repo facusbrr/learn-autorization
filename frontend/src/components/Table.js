@@ -23,7 +23,11 @@ export const Table = ({ headers, data }) => {
     row.forEach((cell) => {
       const td = document.createElement("td");
       td.classList.add("border", "px-4", "py-2");
-      td.textContent = cell;
+      if (cell instanceof HTMLElement) {
+        td.appendChild(cell);
+      } else {
+        td.textContent = cell;
+      }
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
