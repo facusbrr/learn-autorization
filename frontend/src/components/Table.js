@@ -15,16 +15,20 @@ export const Table = ({ headers, data }) => {
   thead.appendChild(tr);
   table.appendChild(thead);
 
+  const tbody = document.createElement("tbody");
+  tbody.classList.add("text-center");
+
   data.forEach((row) => {
     const tr = document.createElement("tr");
     row.forEach((cell) => {
-      const td = document.createElement("tr");
+      const td = document.createElement("td");
       td.classList.add("border", "px-4", "py-2");
       td.textContent = cell;
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
   });
+
   table.appendChild(tbody);
   return table;
 };
