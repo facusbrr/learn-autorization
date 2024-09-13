@@ -28,3 +28,12 @@ export const createTodo = (req, res) => {
 
   res.json({ message: "Tarea agregada", todo });
 };
+//Método para eliminar una Todo
+export const deleteTodo = (req, res) => {
+  const id = parseInt(req.params.id);
+  const todoIndex = database.todos.findIndex((todo) => todo.id === id);
+  if (todoIndex === -1) return res.status(404).send("Tarea no encontrada");
+
+  const todoEliminado = database.todos.splice(todoIndex, 1);
+  res.json({ message: "Tarea eliminada", todoEliminado });
+};
