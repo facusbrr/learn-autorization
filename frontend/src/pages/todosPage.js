@@ -131,6 +131,7 @@ export const todosPage = () => {
     btnDelete.addEventListener("click", async () => {
       try {
         await deleteTodo(id);
+        loadTodos();
       } catch (error) {
         console.error("Error al eliminar la tarea:", error);
       }
@@ -152,7 +153,7 @@ export const todosPage = () => {
     btnEdit.addEventListener("click", () => {
       const newTitle = prompt("Nuevo título:", currentTitle);
       const newCompleted = confirm("¿Está completado?") ? true : false;
-      updateTodo(id, newTitle, newCompleted).then(loadTodos); // Actualizar la tabla después de editar una tarea
+      updateTodo(id, newTitle, newCompleted).then(loadTodos);
     });
     return btnEdit;
   };
