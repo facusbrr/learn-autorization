@@ -37,3 +37,18 @@ export const deleteTodo = (req, res) => {
   const todoEliminado = database.todos.splice(todoIndex, 1);
   res.json({ message: "Tarea eliminada", todoEliminado });
 };
+// Método para actualizar una Todo
+export const updateTodo = (req, res) => {
+  const id = parseInt(req.params.id);
+  const todoIndex = database.todos.findIndex((todo) => todo.id === id);
+
+  if (todoIndex === -1) return res.status(404).send("Tarea no encontrada");
+
+  const { title, completed } = req.body;
+
+  // Actualiza los campos del todo
+  if (title !== undefined) database.todos[todoIndex].title = title;
+  if (completed !== undefined) database.todos[todoIndex].completed = completed;
+
+  res.json({ message: "Tarea actualizada", todo: database.todos[todoIndex] });
+};
