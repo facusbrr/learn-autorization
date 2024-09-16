@@ -35,6 +35,7 @@ export async function deleteTodo(id) {
 
     const data = await response.json();
     console.log("Tarea eliminada:", data);
+    return data;
   } catch (error) {
     console.error("Error al eliminar la tarea:", error);
   }

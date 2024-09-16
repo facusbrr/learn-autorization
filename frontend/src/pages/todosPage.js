@@ -38,6 +38,7 @@ export const todosPage = () => {
   labelCompleted.textContent = "Completado";
   labelCompleted.classList.add("mb-2", "p-2");
 
+  //Botón para crear la Todo
   const btnCreateTodo = Button({
     text: "Crear",
     classes: [
@@ -49,12 +50,11 @@ export const todosPage = () => {
       "mb-4",
     ],
   });
-
   btnCreateTodo.addEventListener("click", async () => {
     await createTodo(inputTitle.value, inputCompleted.checked);
-    loadTodos();
   });
 
+  //Lo que carga en la página
   container.appendChild(btnHome);
   container.appendChild(inputTitle);
   container.appendChild(labelCompleted);
@@ -64,28 +64,32 @@ export const todosPage = () => {
   const tableContainer = document.createElement("div");
   container.appendChild(tableContainer);
 
-  const loadTodos = () => {
-    fetch("http://localhost:4000/todos", {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        tableContainer.innerHTML = "";
-        const headers = ["ID", "Title", "Completed", "Owner Id", "Actions"];
-        const rows = data.todos.map((todo) => {
-          const deleteButton = createDeleteButton(todo.id);
-          return [
-            todo.id,
-            todo.title,
-            todo.completed ? "Sí" : "No",
-            todo.owner,
-            deleteButton,
-          ];
-        });
-
-        const table = Table({ headers, data: rows });
-        container.appendChild(table);
+  //Cargar las Todos
+  const loadTodos = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/todos", {
+        credentials: "include",
       });
+      const data = await response.json();
+      tableContainer.innerHTML = "";
+      const headers = ["ID", "Title", "Completed", "Owner Id", "Actions"];
+
+      const rows = data.todos.map((todo) => {
+        const deleteButton = createDeleteButton(todo.id);
+        return [
+          todo.id,
+          todo.title,
+          todo.completed ? "Sí" : "No",
+          todo.owner,
+          deleteButton,
+        ];
+      });
+
+      const table = Table({ headers, data: rows });
+      tableContainer.appendChild(table);
+    } catch (error) {
+      console.error("Error al cargar las tareas:", error);
+    }
   };
 
   const createDeleteButton = (id) => {
@@ -99,12 +103,13 @@ export const todosPage = () => {
         "hover:bg-red-600",
       ],
     });
-    btnDelete.addEventListener("click", async () => {
+    btnDelete.addEventListener("click", async (e) => {
       await deleteTodo(id);
-      loadTodos(); // Invocar la función para actualizar la tabla
     });
     return btnDelete;
   };
   loadTodos();
+  setInterval(loadTodos, 1000);
+
   return container;
 };
